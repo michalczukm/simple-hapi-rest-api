@@ -2,7 +2,7 @@
 
 const Hapi = require('hapi')
 const STORAGE = require('./data')
-const utils = require('./utils')
+const responseUtils = require('./response-utils');
 
 let lists = STORAGE.lists
 let users = STORAGE.users
@@ -15,54 +15,61 @@ server.connection({
   routes: {
     cors: true
   }
-});
-
-const buildGetResponse = (request, reply, elements) => {
-    if (request.params.id) {
-      const id = encodeURIComponent(request.params.id)
-      return reply(elements.find(e => e.id == id))
-    } else {
-      return reply(elements)
-    }
-};
+})
 
 // lists
 server.route({
   method: 'GET',
   path: '/lists/{id?}',
   handler: (request, reply) => {
-    return buildGetResponse(request, reply, lists);
+    return responseUtils.buildGetResponse(request, reply, lists)
   }
-});
+})
 
 server.route({
-  method: 'POST',
-  path: '/lists',
+  method: ['POST', 'PUT'],
+  path: '/lists/{id?}',
   handler: (request, reply) => {
-    lists = utils.createEntity(request.payload, lists)
-    return reply(lists[lists.length - 1]).code(201)
+    return responseUtils.buildCreateOrUpdateResponse(request, reply, lists)
   }
-});
+})
 
+// items
 server.route({
   method: 'GET',
   path: '/items/{id?}',
   handler: (request, reply) => {
-    return buildGetResponse(request, reply, lists);
+    return responseUtils.buildGetResponse(request, reply, items)
   }
-});
+})
 
+server.route({
+  method: ['POST', 'PUT'],
+  path: '/items/{id?}',
+  handler: (request, reply) => {
+    return responseUtils.buildCreateOrUpdateResponse(request, reply, items)
+  }
+})
+
+// users
 server.route({
   method: 'GET',
   path: '/users/{id?}',
   handler: (request, reply) => {
-    return buildGetResponse(request, reply, lists);
+    return responseUtils.buildGetResponse(request, reply, users)
   }
 })
 
-// Start the server
-server.start((err) => {
+server.route({
+  method: ['POST', 'PUT'],
+  path: '/users/{id?}',
+  handler: (request, reply) => {
+    return responseUtils.buildCreateOrUpdateResponse(request, reply, users)
+  }
+})
 
+
+server.start((err) => {
   if (err) {
     throw err
   }

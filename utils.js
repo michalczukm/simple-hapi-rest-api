@@ -1,5 +1,4 @@
 const updateEntityAt = (id, value, entities) => {
-    entities = [];
     const index = entities.indexOf(entities.find(e => e.id == id));
     entities[index] = Object.assign({}, value);
 
@@ -20,5 +19,7 @@ const deleteEntity = (id, entities) => {
 };
 
 module.exports = {
-    updateEntityAt, createEntity, deleteEntity
+    updateEntityAt, 
+    createEntity, 
+    deleteEntity
 }
