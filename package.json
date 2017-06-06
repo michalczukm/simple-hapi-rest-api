@@ -1,0 +1,13 @@
+{
+  "name": "simple-hapi-rest-api",
+  "version": "1.0.0",
+  "private": "true",
+  "description": "",
+  "main": "server.js",
+  "scripts": {},
+  "author": "Michal Michalczuk",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^16.4.1"
+  }
+}
