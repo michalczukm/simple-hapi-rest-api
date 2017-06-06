@@ -17,6 +17,8 @@ server.connection({
   }
 })
 
+server.realm.modifiers.route.prefix = '/api'
+
 // lists
 server.route({
   method: 'GET',
@@ -30,7 +32,15 @@ server.route({
   method: ['POST', 'PUT'],
   path: '/lists/{id?}',
   handler: (request, reply) => {
-    return responseUtils.buildCreateOrUpdateResponse(request, reply, lists)
+    return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists')
+  }
+})
+
+server.route({
+  method: 'DELETE',
+  path: '/lists/{id}',
+  handler: (request, reply) => {
+    return responseUtils.buildDeleteResponse(request, reply, lists)
   }
 })
 
@@ -47,7 +57,16 @@ server.route({
   method: ['POST', 'PUT'],
   path: '/items/{id?}',
   handler: (request, reply) => {
-    return responseUtils.buildCreateOrUpdateResponse(request, reply, items)
+    return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items')
+  }
+})
+
+// items DELETE - not implemented
+server.route({
+  method: 'DELETE',
+  path: '/items/{id}',
+  handler: (request, reply) => {
+      return reply().code(501)
   }
 })
 
@@ -64,10 +83,17 @@ server.route({
   method: ['POST', 'PUT'],
   path: '/users/{id?}',
   handler: (request, reply) => {
-    return responseUtils.buildCreateOrUpdateResponse(request, reply, users)
+    return responseUtils.buildCreateOrUpdateResponse(request, reply, users, 'users')
   }
 })
 
+server.route({
+  method: 'DELETE',
+  path: '/users/{id}',
+  handler: (request, reply) => {
+    return responseUtils.buildDeleteResponse(request, reply, users)
+  }
+})
 
 server.start((err) => {
   if (err) {
