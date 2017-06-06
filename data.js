@@ -37,8 +37,7 @@ const STORAGE = {
     {
       'id': 3,
       'username': 'nowakp'
-    },
-    
+    }
   ],
   'items': [
     {
