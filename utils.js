@@ -15,7 +15,7 @@ const createEntity = (value, entities) => {
 const deleteEntity = (id, entities) => {
   const index = entities.indexOf(entities.find(e => e.id == id))
   if (index > -1) {
-    entities.splice(1, index)
+    entities.splice(index, 1)
     return entities;
   } else {
     throw new Error('element not found')
