@@ -1,8 +1,10 @@
 const utils = require('./utils')
 
 const ERROR_NOT_FOUND = {
-  error: 'Element not found',
-  code: 'ELEMENT_NOT_FOUND'
+  error: {
+    message: 'Element not found',
+    code: 'ELEMENT_NOT_FOUND'
+  }
 }
 
 const buildGetResponse = (request, reply, elements) => {
@@ -43,4 +45,5 @@ const buildDeleteResponse = (request, reply, elements) => {
 module.exports = {
   buildGetResponse,
   buildCreateOrUpdateResponse,
-buildDeleteResponse}
+  buildDeleteResponse
+}

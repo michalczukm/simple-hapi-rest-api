@@ -6,7 +6,7 @@ const responseUtils = require('./response-utils');
 
 let lists = STORAGE.lists
 let users = STORAGE.users
-let items = STORAGE.users
+let items = STORAGE.items
 
 // Create a server with a host and port
 const server = new Hapi.Server()

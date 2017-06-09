@@ -25,4 +25,5 @@ const deleteEntity = (id, entities) => {
 module.exports = {
   updateEntityAt,
   createEntity,
-  deleteEntity}
+  deleteEntity
+}
