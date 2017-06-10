@@ -9,6 +9,9 @@ const controller = (server) => {
     path: '/items/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildGetResponse(request, reply, items)
+    },
+    config: {
+      tags: ['api']
     }
   })
 
@@ -19,6 +22,7 @@ const controller = (server) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items')
     },
     config: {
+      tags: ['api'],
       validate: {
         payload: Joi.object({
           id: Joi.number().optional(),
@@ -35,6 +39,9 @@ const controller = (server) => {
     path: '/items/{id}',
     handler: (request, reply) => {
       return reply().code(501)
+    },
+    config: {
+      tags: ['api']
     }
   })
 }

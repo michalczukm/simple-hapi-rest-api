@@ -1,8 +1,8 @@
 {
   "name": "simple-hapi-rest-api",
   "version": "1.0.0",
-  "private": "true",
-  "description": "",
+  "private": true,
+  "description": "Simple REST API - example for lectures",
   "main": "server.js",
   "scripts": {},
   "author": {
@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "hapi": "^16.4.1",
-    "joi": "^10.5.2"
+    "hapi-swagger": "^7.7.0",
+    "inert": "^4.2.0",
+    "joi": "^10.5.2",
+    "vision": "^4.1.1"
   }
 }

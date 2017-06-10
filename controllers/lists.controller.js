@@ -9,6 +9,9 @@ const controller = (server) => {
     path: '/lists/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildGetResponse(request, reply, lists)
+    },
+    config: {
+      tags: ['api']
     }
   })
 
@@ -19,6 +22,7 @@ const controller = (server) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists')
     },
     config: {
+      tags: ['api'],
       validate: {
         payload: Joi.object({
           id: Joi.number().optional(),
@@ -26,7 +30,7 @@ const controller = (server) => {
           userId: Joi.number().required(),
           purpose: Joi.string().optional()
         }).required()
-      } 
+      }
     }
   })
 
@@ -35,8 +39,11 @@ const controller = (server) => {
     path: '/lists/{id}',
     handler: (request, reply) => {
       return responseUtils.buildDeleteResponse(request, reply, lists)
+    },
+    config: {
+      tags: ['api']
     }
   })
 }
 
-module.exports = controller;
+module.exports = controller
