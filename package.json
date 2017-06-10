@@ -5,7 +5,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {},
-  "author": "Michal Michalczuk",
+  "author": {
+    "name": "Michal Michalczuk"
+  },
   "license": "ISC",
   "dependencies": {
     "hapi": "^16.4.1"
