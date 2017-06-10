@@ -44,7 +44,9 @@ const controller = (server) => {
     method: 'DELETE',
     path: '/users/{id}',
     handler: (request, reply) => {
-      return responseUtils.buildDeleteResponse(request, reply, users)
+      const { elements, response } = responseUtils.buildDeleteResponse(request, reply, [...users])
+      users = elements
+      return response
     },
     config: {
       tags: ['api'],

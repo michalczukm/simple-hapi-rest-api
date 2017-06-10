@@ -41,6 +41,10 @@ const controller = (server) => {
     }
   })
 
+  /*
+    DELETE from items
+    intentionally not implemented method :)
+  */
   server.route({
     method: 'DELETE',
     path: '/items/{id}',

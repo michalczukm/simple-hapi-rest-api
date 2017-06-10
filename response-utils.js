@@ -35,10 +35,15 @@ const buildCreateOrUpdateResponse = (request, reply, elements, resourceName) => 
 const buildDeleteResponse = (request, reply, elements) => {
   const id = encodeURIComponent(request.params.id)
   try {
-    elements = [...utils.deleteEntity(id, elements)]
-    return reply().code(200)
+    return { 
+      elements: [...utils.deleteEntity(id, elements)], 
+      response: reply().code(200) 
+    }
   } catch (error) {
-    return reply(ERROR_NOT_FOUND).code(404)
+    return {
+      elements: elements,
+      response: reply(ERROR_NOT_FOUND).code(404)
+    }
   }
 }
 
