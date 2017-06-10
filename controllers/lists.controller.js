@@ -1,3 +1,5 @@
+const Joi = require('joi')
+
 const responseUtils = require('../response-utils')
 let lists = require('../data').lists
 
@@ -15,6 +17,16 @@ const controller = (server) => {
     path: '/lists/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists')
+    },
+    config: {
+      validate: {
+        payload: Joi.object({
+          id: Joi.number().optional(),
+          title: Joi.string().required(),
+          userId: Joi.number().required(),
+          purpose: Joi.string().optional()
+        }).required()
+      } 
     }
   })
 
