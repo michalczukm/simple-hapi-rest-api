@@ -11,7 +11,12 @@ const controller = (server) => {
       return responseUtils.buildGetResponse(request, reply, users)
     },
     config: {
-      tags: ['api']
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().integer().allow(null).optional()
+        }
+      }
     }
   })
 
@@ -27,7 +32,10 @@ const controller = (server) => {
         payload: Joi.object({
           id: Joi.number().optional(),
           username: Joi.string().required()
-        }).required()
+        }).required(),
+        params: {
+          id: Joi.number().optional()
+        }
       }
     }
   })
@@ -39,7 +47,12 @@ const controller = (server) => {
       return responseUtils.buildDeleteResponse(request, reply, users)
     },
     config: {
-      tags: ['api']
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().optional()
+        }
+      }
     }
   })
 }

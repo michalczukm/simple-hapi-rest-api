@@ -11,7 +11,12 @@ const controller = (server) => {
       return responseUtils.buildGetResponse(request, reply, items)
     },
     config: {
-      tags: ['api']
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().integer().allow(null).optional()
+        }
+      }
     }
   })
 
@@ -24,16 +29,18 @@ const controller = (server) => {
     config: {
       tags: ['api'],
       validate: {
+        params: {
+          id: Joi.number().optional()
+        },
         payload: Joi.object({
           id: Joi.number().optional(),
           content: Joi.string().required(),
-          listId: Joi.number().required()
+          listId: Joi.number().integer().required()
         }).required()
       }
     }
   })
 
-  // items DELETE - not implemented
   server.route({
     method: 'DELETE',
     path: '/items/{id}',
@@ -41,7 +48,12 @@ const controller = (server) => {
       return reply().code(501)
     },
     config: {
-      tags: ['api']
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().optional()
+        }
+      }
     }
   })
 }
