@@ -27,6 +27,14 @@ server.connection({
 
 server.realm.modifiers.route.prefix = '/api'
 
+server.route({
+  method: ['GET', 'POST', 'PUT', 'DELETE'],
+  path: '/alwaysbad',
+  handler: (request, reply) => {
+    return reply(`Nope, this method won't work`).code(418)
+  }
+})
+
 require('./controllers/lists.controller')(server)
 require('./controllers/items.controller')(server)
 require('./controllers/users.controller')(server)
