@@ -1,6 +1,10 @@
 const updateEntityAt = (id, value, entities) => {
   const index = entities.indexOf(entities.find(e => e.id == id))
-  entities[index] = Object.assign({}, value)
+  if (index > -1) {
+    entities[index] = Object.assign(entities[index], value)
+  } else {
+    throw new Error('element not found')
+  }
 
   return entities
 }

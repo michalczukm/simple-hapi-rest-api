@@ -21,23 +21,34 @@ const buildGetResponse = (request, reply, elements) => {
 }
 
 const buildCreateOrUpdateResponse = (request, reply, elements, resourceName) => {
-  if (request.params.id) {
-    const id = encodeURIComponent(request.params.id)
-    elements = utils.updateEntityAt(request.payload.id, request.payload, elements)
-    return reply().code(200)
-  } else {
+  const handlePost = () => {
     elements = utils.createEntity(request.payload, elements)
     const newElement = elements[elements.length - 1]
     return reply(newElement).created(`/api/${resourceName}/${newElement.id}`)
+  }
+
+  const handlePut = () => {
+    const id = encodeURIComponent(request.params.id)
+    elements = utils.updateEntityAt(request.params.id, request.payload, elements)
+    return reply().code(200)
+  }
+
+  try {
+    return request.params.id ? handlePut() : handlePost()
+  } catch (error) {
+    return {
+      elements: elements,
+      response: reply(ERROR_NOT_FOUND).code(404)
+    }
   }
 }
 
 const buildDeleteResponse = (request, reply, elements) => {
   const id = encodeURIComponent(request.params.id)
   try {
-    return { 
-      elements: [...utils.deleteEntity(id, elements)], 
-      response: reply().code(200) 
+    return {
+      elements: [...utils.deleteEntity(id, elements)],
+      response: reply().code(200)
     }
   } catch (error) {
     return {
@@ -50,5 +61,4 @@ const buildDeleteResponse = (request, reply, elements) => {
 module.exports = {
   buildGetResponse,
   buildCreateOrUpdateResponse,
-  buildDeleteResponse
-}
+buildDeleteResponse}
