@@ -5,6 +5,8 @@ const Inert = require('inert')
 const Vision = require('vision')
 const HapiSwagger = require('hapi-swagger')
 const Pack = require('./package.json')
+const Basic = require('hapi-auth-basic')
+const authService = require('./auth/auth-service');
 
 const swaggerOptions = {
   basePath: '/api/',
@@ -27,22 +29,34 @@ server.connection({
 
 server.realm.modifiers.route.prefix = '/api'
 
-server.route({
-  method: ['GET', 'POST', 'PUT', 'DELETE'],
-  path: '/alwaysbad',
-  handler: (request, reply) => {
-    return reply(`Nope, this method won't work`).code(418)
-  }
-})
+const addRoutes = () => {
+  server.route({
+    method: ['GET', 'POST', 'PUT', 'DELETE'],
+    path: '/alwaysbad',
+    handler: (request, reply) => {
+      return reply(`Nope, this method won't work`).code(418)
+    }
+  })
 
-require('./controllers/lists.controller')(server)
-require('./controllers/items.controller')(server)
-require('./controllers/users.controller')(server)
+  require('./controllers/lists.controller')(server)
+  require('./controllers/items.controller')(server)
+  require('./controllers/users.controller')(server)
+}
+
+const basicAuthValidation = (request, username, password, callback) => {
+  authService.isAuthorized(username, password)
+    .then(result => callback(null, result.isValid, result.credentials))
+    .catch(error => callback(null, false, error.credentials))
+}
 
 server.register([
-  Inert, Vision,
+  Inert, Vision, Basic,
   { register: HapiSwagger, options: swaggerOptions }
 ]).then(() => {
+  server.auth.strategy('simple', 'basic', { validateFunc: basicAuthValidation })
+
+  addRoutes();
+
   server.start((err) => {
     if (err) {
       throw err

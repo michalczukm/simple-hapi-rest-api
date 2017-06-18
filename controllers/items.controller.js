@@ -1,3 +1,4 @@
+/* items API actions require authorization - by Basic-Auth */
 const Joi = require('joi')
 
 const responseUtils = require('../response-utils')
@@ -11,6 +12,7 @@ const controller = (server) => {
       return responseUtils.buildGetResponse(request, reply, items)
     },
     config: {
+      auth: 'simple',
       tags: ['api'],
       validate: {
         params: {
@@ -27,6 +29,7 @@ const controller = (server) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items')
     },
     config: {
+      auth: 'simple',
       tags: ['api'],
       validate: {
         params: {
@@ -52,6 +55,7 @@ const controller = (server) => {
       return reply().code(501)
     },
     config: {
+      auth: 'simple',
       tags: ['api'],
       validate: {
         params: {
