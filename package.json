@@ -4,7 +4,10 @@
   "private": true,
   "description": "Simple REST API - example for lectures",
   "main": "server.js",
-  "scripts": {},
+  "scripts": {
+    "eslint": "eslint",
+    "lint": "npm run eslint -- . --ext .js"
+  },
   "author": {
     "name": "Michal Michalczuk"
   },
@@ -16,5 +19,8 @@
     "inert": "^4.2.0",
     "joi": "^10.5.2",
     "vision": "^4.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.0.0"
   }
 }

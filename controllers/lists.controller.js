@@ -1,14 +1,14 @@
-const Joi = require('joi')
+const Joi = require('joi');
 
-const responseUtils = require('../response-utils')
-let lists = require('../data').lists
+const responseUtils = require('../response-utils');
+let lists = require('../data').lists;
 
 const controller = (server) => {
   server.route({
     method: 'GET',
     path: '/lists/{id?}',
     handler: (request, reply) => {
-      return responseUtils.buildGetResponse(request, reply, lists)
+      return responseUtils.buildGetResponse(request, reply, lists);
     },
     config: {
       tags: ['api'],
@@ -18,13 +18,13 @@ const controller = (server) => {
         }
       }
     }
-  })
+  });
 
   server.route({
     method: ['POST', 'PUT'],
     path: '/lists/{id?}',
     handler: (request, reply) => {
-      return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists')
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists');
     },
     config: {
       tags: ['api'],
@@ -40,15 +40,15 @@ const controller = (server) => {
         }
       }
     }
-  })
+  });
 
   server.route({
     method: 'DELETE',
     path: '/lists/{id}',
     handler: (request, reply) => {
-      const { elements, response } = responseUtils.buildDeleteResponse(request, reply, [...lists])
-      lists = elements
-      return response
+      const { elements, response } = responseUtils.buildDeleteResponse(request, reply, [...lists]);
+      lists = elements;
+      return response;
     },
     config: {
       tags: ['api'],
@@ -58,7 +58,7 @@ const controller = (server) => {
         }
       }
     }
-  })
-}
+  });
+};
 
-module.exports = controller
+module.exports = controller;

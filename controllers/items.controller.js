@@ -1,15 +1,15 @@
 /* items API actions require authorization - by Basic-Auth */
-const Joi = require('joi')
+const Joi = require('joi');
 
-const responseUtils = require('../response-utils')
-let items = require('../data').items
+const responseUtils = require('../response-utils');
+let items = require('../data').items;
 
 const controller = (server) => {
   server.route({
     method: 'GET',
     path: '/items/{id?}',
     handler: (request, reply) => {
-      return responseUtils.buildGetResponse(request, reply, items)
+      return responseUtils.buildGetResponse(request, reply, items);
     },
     config: {
       auth: 'simple',
@@ -20,13 +20,13 @@ const controller = (server) => {
         }
       }
     }
-  })
+  });
 
   server.route({
     method: ['POST', 'PUT'],
     path: '/items/{id?}',
     handler: (request, reply) => {
-      return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items')
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');
     },
     config: {
       auth: 'simple',
@@ -42,7 +42,7 @@ const controller = (server) => {
         }).required()
       }
     }
-  })
+  });
 
   /*
     DELETE from items
@@ -52,7 +52,7 @@ const controller = (server) => {
     method: 'DELETE',
     path: '/items/{id}',
     handler: (request, reply) => {
-      return reply().code(501)
+      return reply().code(501);
     },
     config: {
       auth: 'simple',
@@ -63,7 +63,7 @@ const controller = (server) => {
         }
       }
     }
-  })
-}
+  });
+};
 
-module.exports = controller
+module.exports = controller;

@@ -23,13 +23,13 @@ const isAuthorized = (username, password) => {
         return new Promise((resolve, reject) => reject({ isValid: false, credentials: null }));
     }
 
-    const buildResult = (isValid) => { return { credentials: { id: user.id, username: user.username }, isValid: isValid } }
+    const buildResult = (isValid) => { return { credentials: { id: user.id, username: user.username }, isValid: isValid }; };
 
     return new Promise((resolve, reject) => {
         password === user.password
             ? resolve(buildResult(true))
-            : reject(buildResult(false))
-    })
-}
+            : reject(buildResult(false));
+    });
+};
 
 module.exports = { isAuthorized };
