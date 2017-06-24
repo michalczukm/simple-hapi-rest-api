@@ -4,15 +4,14 @@ const Joi = require('joi');
 const responseUtils = require('../response-utils');
 let items = require('../data').items;
 
-const controller = (server) => {
+const v1 = (server) => {
   server.route({
     method: 'GET',
     path: '/items/{id?}',
     handler: (request, reply) => {
-      return responseUtils.buildGetResponse(request, reply, items);
+      return responseUtils.buildGetResponse(request, reply, items, request.query);
     },
     config: {
-      auth: 'simple',
       tags: ['api'],
       validate: {
         params: {
@@ -29,7 +28,6 @@ const controller = (server) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');
     },
     config: {
-      auth: 'simple',
       tags: ['api'],
       validate: {
         params: {
@@ -55,6 +53,68 @@ const controller = (server) => {
       return reply().code(501);
     },
     config: {
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().optional()
+        }
+      }
+    }
+  });
+};
+
+const v2 = (server) => {
+  
+  server.route({
+    method: 'GET',
+    path: '/v2/items/{id?}',
+    handler: (request, reply) => {
+      return responseUtils.buildGetResponse(request, reply, items, request.query);
+    },
+    config: {
+      auth: 'simple',
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().integer().allow(null).optional()
+        }
+      }
+    }
+  });
+
+  server.route({
+    method: ['POST', 'PUT'],
+    path: '/v2/items/{id?}',
+    handler: (request, reply) => {
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');
+    },
+    config: {
+      auth: 'simple',
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().optional()
+        },
+        payload: Joi.object({
+          id: Joi.number().optional(),
+          content: Joi.string().required(),
+          listId: Joi.number().integer().required()
+        }).required()
+      }
+    }
+  });
+
+  /*
+    DELETE from items
+    intentionally not implemented method :)
+  */
+  server.route({
+    method: 'DELETE',
+    path: '/v2/items/{id}',
+    handler: (request, reply) => {
+      return reply().code(501);
+    },
+    config: {
       auth: 'simple',
       tags: ['api'],
       validate: {
@@ -64,6 +124,11 @@ const controller = (server) => {
       }
     }
   });
+};
+
+const controller = (server) => {
+  v1(server);
+  v2(server);
 };
 
 module.exports = controller;

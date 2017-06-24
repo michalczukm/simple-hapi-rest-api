@@ -7,7 +7,14 @@ const ERROR_NOT_FOUND = {
   }
 };
 
-const buildGetResponse = (request, reply, elements) => {
+/**
+ * For now it handles only simple queries - with one key
+ * @param {*} request 
+ * @param {*} reply 
+ * @param {*} elements 
+ * @param {*} simpleQuery 
+ */
+const buildGetResponse = (request, reply, elements, simpleQuery = {}) => {
   if (request.params.id) {
     const id = encodeURIComponent(request.params.id);
     const foundElement = elements.find(e => e.id == id);
@@ -16,7 +23,10 @@ const buildGetResponse = (request, reply, elements) => {
       ? reply(foundElement)
       : reply(ERROR_NOT_FOUND).code(404);
   } else {
-    return reply(elements);
+    const result = Object.keys(simpleQuery).length > 0
+      ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == Object.values(simpleQuery)[0])
+      : elements;
+    return reply(result);
   }
 };
 
@@ -61,4 +71,5 @@ const buildDeleteResponse = (request, reply, elements) => {
 module.exports = {
   buildGetResponse,
   buildCreateOrUpdateResponse,
-buildDeleteResponse};
+  buildDeleteResponse
+};

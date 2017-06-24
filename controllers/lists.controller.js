@@ -8,7 +8,7 @@ const controller = (server) => {
     method: 'GET',
     path: '/lists/{id?}',
     handler: (request, reply) => {
-      return responseUtils.buildGetResponse(request, reply, lists);
+      return responseUtils.buildGetResponse(request, reply, lists, request.query);
     },
     config: {
       tags: ['api'],
