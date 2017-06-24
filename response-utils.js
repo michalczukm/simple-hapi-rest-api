@@ -23,8 +23,12 @@ const buildGetResponse = (request, reply, elements, simpleQuery = {}) => {
       ? reply(foundElement)
       : reply(ERROR_NOT_FOUND).code(404);
   } else {
+    // heroku has older nodejs version - Object.values is not allowed :()
+    // const result = Object.keys(simpleQuery).length > 0
+    //   ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == Object.values(simpleQuery)[0])
+    //   : elements;
     const result = Object.keys(simpleQuery).length > 0
-      ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == Object.values(simpleQuery)[0])
+      ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == simpleQuery[Object.keys(simpleQuery)[0]])
       : elements;
     return reply(result);
   }
