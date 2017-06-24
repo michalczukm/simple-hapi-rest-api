@@ -15,6 +15,9 @@ const controller = (server) => {
       validate: {
         params: {
           id: Joi.number().integer().allow(null).optional()
+        },
+        query: {
+          userId: Joi.number().integer().optional()
         }
       }
     }

@@ -16,6 +16,9 @@ const v1 = (server) => {
       validate: {
         params: {
           id: Joi.number().integer().allow(null).optional()
+        },
+        query: {
+          listId: Joi.number().integer().optional()
         }
       }
     }
@@ -77,6 +80,9 @@ const v2 = (server) => {
       validate: {
         params: {
           id: Joi.number().integer().allow(null).optional()
+        },
+        query: {
+          listId: Joi.number().integer().optional()
         }
       }
     }
