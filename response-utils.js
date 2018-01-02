@@ -42,7 +42,6 @@ const buildCreateOrUpdateResponse = (request, reply, elements, resourceName) => 
   };
 
   const handlePut = () => {
-    const id = encodeURIComponent(request.params.id);
     elements = utils.updateEntityAt(request.params.id, request.payload, elements);
     return reply().code(200);
   };

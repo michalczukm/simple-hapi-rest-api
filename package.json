@@ -6,6 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "start:dev": "nodemon",
     "eslint": "eslint",
     "lint": "npm run eslint -- . --ext .js"
   },
@@ -22,7 +23,8 @@
     "vision": "^4.1.1"
   },
   "devDependencies": {
-    "eslint": "^4.0.0"
+    "eslint": "^4.0.0",
+    "nodemon": "^1.14.7"
   },
   "engines": {
     "node": "8.1.4"
