@@ -24,7 +24,26 @@ const controller = (server) => {
   });
 
   server.route({
-    method: ['POST', 'PUT'],
+    method: ['POST'],
+    path: '/lists',
+    handler: (request, reply) => {
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists');
+    },
+    config: {
+      tags: ['api'],
+      validate: {
+        payload: Joi.object({
+          id: Joi.number().optional(),
+          title: Joi.string().required(),
+          userId: Joi.number().integer().required(),
+          purpose: Joi.string().optional()
+        }).required()
+      }
+    }
+  });
+
+  server.route({
+    method: ['PUT'],
     path: '/lists/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, lists, 'lists');

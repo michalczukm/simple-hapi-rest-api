@@ -25,7 +25,25 @@ const v1 = (server) => {
   });
 
   server.route({
-    method: ['POST', 'PUT'],
+    method: ['POST'],
+    path: '/items/{id?}',
+    handler: (request, reply) => {
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');
+    },
+    config: {
+      tags: ['api'],
+      validate: {
+        payload: Joi.object({
+          id: Joi.number().optional(),
+          content: Joi.string().required(),
+          listId: Joi.number().integer().required()
+        }).required()
+      }
+    }
+  });
+
+  server.route({
+    method: ['PUT'],
     path: '/items/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');
@@ -89,7 +107,26 @@ const v2 = (server) => {
   });
 
   server.route({
-    method: ['POST', 'PUT'],
+    method: ['POST'],
+    path: '/v2/items',
+    handler: (request, reply) => {
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');
+    },
+    config: {
+      auth: 'simple',
+      tags: ['api'],
+      validate: {
+        payload: Joi.object({
+          id: Joi.number().optional(),
+          content: Joi.string().required(),
+          listId: Joi.number().integer().required()
+        }).required()
+      }
+    }
+  });
+
+  server.route({
+    method: ['PUT'],
     path: '/v2/items/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, items, 'items');

@@ -21,7 +21,24 @@ const controller = (server) => {
   });
 
   server.route({
-    method: ['POST', 'PUT'],
+    method: ['POST'],
+    path: '/users',
+    handler: (request, reply) => {
+      return responseUtils.buildCreateOrUpdateResponse(request, reply, users, 'users');
+    },
+    config: {
+      tags: ['api'],
+      validate: {
+        payload: Joi.object({
+          id: Joi.number().optional(),
+          username: Joi.string().required()
+        }).required()
+      }
+    }
+  });
+
+  server.route({
+    method: ['PUT'],
     path: '/users/{id?}',
     handler: (request, reply) => {
       return responseUtils.buildCreateOrUpdateResponse(request, reply, users, 'users');
