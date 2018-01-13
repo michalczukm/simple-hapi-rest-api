@@ -11,7 +11,7 @@ const updateEntityAt = (id, value, entities) => {
 };
 
 const createEntity = (value, entities) => {
-  value.id = (Math.max([...entities.map(e => e.id)]) || 0) + 1;
+  value.id = (Math.max(...entities.map(e => e.id).concat(0))) + 1;
   entities.push(value);
 
   return entities;
