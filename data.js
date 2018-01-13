@@ -20,8 +20,8 @@ const STORAGE = {
     },
     {
       'id': 4,
-      'title': 'People to call today',
-      'purpose': 'Just remember about calling them!',
+      'title': 'People to schedule meeting',
+      'purpose': 'Remember - place them in your calendar!',
       'userId': 2
     }
   ],
