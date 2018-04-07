@@ -83,6 +83,24 @@ const controller = (server) => {
   });
 
   server.route({
+    method: ['PUT'],
+    path: '/lists/{id}/move',
+    handler: require('./handlers/lists/move-list.handler'),
+    config: {
+      tags: ['api'],
+      description: 'Example of non CRUD operation. Move the list to another user - pass the user ID in body to do that',
+      validate: {
+        payload: Joi.object({
+          userId: Joi.number().integer().required()
+        }).required(),
+        params: {
+          id: Joi.number().optional()
+        }
+      }
+    }
+  });
+
+  server.route({
     method: 'DELETE',
     path: '/lists/{id}',
     handler: (request, reply) => {

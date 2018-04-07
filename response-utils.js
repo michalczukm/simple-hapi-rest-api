@@ -79,6 +79,7 @@ const buildDeleteResponse = (request, reply, elements) => {
 };
 
 module.exports = {
+  ERROR_NOT_FOUND,
   buildGetResponse,
   buildCreateOrUpdateResponse,
   buildDeleteResponse,
