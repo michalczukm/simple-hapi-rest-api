@@ -1,6 +1,7 @@
 const Joi = require('joi');
 
-const responseUtils = require('../response-utils');
+const responseUtils = require('../utils/response-utils');
+const joiValidationUtils = require('../utils/joi-validation-utils');
 let { lists, items } = require('../data');
 
 const controller = (server) => {
@@ -12,12 +13,17 @@ const controller = (server) => {
     },
     config: {
       tags: ['api'],
+      description: `You can paginate list on this endpoint. Default items per page ${responseUtils.PAGINATION_DEFAULT_LIMIT}`,
       validate: {
+        headers: { ...joiValidationUtils.paginationHeaders },
         params: {
           id: Joi.number().integer().allow(null).optional()
         },
         query: {
           userId: Joi.number().integer().optional()
+        },
+        options: {
+          allowUnknown: true
         }
       }
     }

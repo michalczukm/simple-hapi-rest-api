@@ -1,6 +1,6 @@
 const Boom = require('boom');
 
-const responseUtils = require('../../../response-utils');
+const responseUtils = require('../../../utils/response-utils');
 let { lists, users } = require('../../../data');
 
 module.exports = (request, reply) => {

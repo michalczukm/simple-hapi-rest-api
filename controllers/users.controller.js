@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const responseUtils = require('../response-utils');
+const responseUtils = require('../utils/response-utils');
 let { users, lists } = require('../data');
 
 const controller = (server) => {

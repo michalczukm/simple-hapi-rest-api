@@ -1,10 +1,19 @@
-const utils = require('./utils');
+const entityUtils = require('./entity-utils');
 
 const ERROR_NOT_FOUND = {
   error: {
     message: 'Element not found',
     code: 'ELEMENT_NOT_FOUND'
   }
+};
+
+const PAGINATION_DEFAULT_LIMIT = 10;
+
+const PAGINATION_HEADERS = {
+  page: 'x-pagination-page',
+  perPage: 'x-pagination-per_page',
+  totalCount: 'x-pagination-total_count',
+  pageCount: 'x-pagination-page_count'
 };
 
 /**
@@ -19,9 +28,27 @@ const buildGetResponse = (request, reply, elements, simpleQuery = {}) => {
     ? reply(foundElement)
     : reply(ERROR_NOT_FOUND).code(404);
 
+  const getResponseForCollection = elements => {
+    if(request.headers[PAGINATION_HEADERS.page]) {
+      const pagination = paginate({
+        page: request.headers[PAGINATION_HEADERS.page] || 0,
+        perPage: request.headers[PAGINATION_HEADERS.perPage] || 0
+      }, elements);
+
+      return reply(pagination.result)
+                  .header(PAGINATION_HEADERS.page, pagination.metadata.page)
+                  .header(PAGINATION_HEADERS.perPage, pagination.metadata.perPage)
+                  .header(PAGINATION_HEADERS.pageCount, pagination.metadata.pageCount)
+                  .header(PAGINATION_HEADERS.totalCount, pagination.metadata.totalCount)
+                  .code(200);
+    } else {
+      return reply(elements).code(200);
+    }
+  };
+
   return request.params.id
     ? getResponseForGetById(getElementByParamsId(request, elements))
-    : reply(filterBySimpleKeyValueQuery(simpleQuery, elements));
+    : getResponseForCollection(filterBySimpleKeyValueQuery(simpleQuery, elements));
 };
 
 /**
@@ -43,13 +70,13 @@ const buildNestedResourceGetResponse = (request, reply, elements, nestedResource
 
 const buildCreateOrUpdateResponse = (request, reply, elements, resourceName) => {
   const handlePost = () => {
-    elements = utils.createEntity(request.payload, elements);
+    elements = entityUtils.createEntity(request.payload, elements);
     const newElement = elements[elements.length - 1];
     return reply(newElement).created(`/api/${resourceName}/${newElement.id}`);
   };
 
   const handlePut = () => {
-    elements = utils.updateEntityAt(request.params.id, request.payload, elements);
+    elements = entityUtils.updateEntityAt(request.params.id, request.payload, elements);
     return reply().code(200);
   };
 
@@ -67,7 +94,7 @@ const buildDeleteResponse = (request, reply, elements) => {
   const id = encodeURIComponent(request.params.id);
   try {
     return {
-      elements: [...utils.deleteEntity(id, elements)],
+      elements: [...entityUtils.deleteEntity(id, elements)],
       response: reply().code(200)
     };
   } catch (error) {
@@ -80,6 +107,8 @@ const buildDeleteResponse = (request, reply, elements) => {
 
 module.exports = {
   ERROR_NOT_FOUND,
+  PAGINATION_HEADERS,
+  PAGINATION_DEFAULT_LIMIT,
   buildGetResponse,
   buildCreateOrUpdateResponse,
   buildDeleteResponse,
@@ -94,3 +123,28 @@ const filterBySimpleKeyValueQuery = (simpleQuery, elements) =>
     ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == simpleQuery[Object.keys(simpleQuery)[0]])
     : elements;
 
+const paginate = (config, elements = []) => {
+    const defaultLimit = PAGINATION_DEFAULT_LIMIT;
+    let { page, perPage } = config;
+
+    perPage = perPage > defaultLimit ? perPage : defaultLimit;
+
+    const totalCount = elements.length;
+    const pageCount = Math.ceil(totalCount / perPage);
+
+    if (page > pageCount) {
+      page = pageCount;
+    } else if (page < 0) {
+      page = 0;
+    }
+
+    return {
+      metadata: {
+        totalCount,
+        pageCount,
+        perPage,
+        page
+      },
+      result: elements.slice((page - 1) * perPage, page * perPage)
+    };
+};

@@ -1,7 +1,7 @@
 /* items API actions require authorization - by Basic-Auth */
 const Joi = require('joi');
 
-const responseUtils = require('../response-utils');
+const responseUtils = require('../utils/response-utils');
 let items = require('../data').items;
 
 const v1 = (server) => {
