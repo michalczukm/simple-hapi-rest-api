@@ -15,23 +15,30 @@ const ERROR_NOT_FOUND = {
  * @param {*} simpleQuery 
  */
 const buildGetResponse = (request, reply, elements, simpleQuery = {}) => {
-  if (request.params.id) {
-    const id = encodeURIComponent(request.params.id);
-    const foundElement = elements.find(e => e.id == id);
+  const getResponseForGetById = foundElement => foundElement
+    ? reply(foundElement)
+    : reply(ERROR_NOT_FOUND).code(404);
 
-    return foundElement
-      ? reply(foundElement)
+  return request.params.id
+    ? getResponseForGetById(getElementByParamsId(request, elements))
+    : reply(filterBySimpleKeyValueQuery(simpleQuery, elements));
+};
+
+/**
+ * Get nested resources by calling external query for them, after picking one element.
+ * @example: elements: [ { name: 'John', items: [1, 2, 3]} ], 
+ *           nestedResourceQuery: element => externalList.filter(item => item.ExternalElementId === element.id)
+ * @param {*} request 
+ * @param {*} reply 
+ * @param {*} elements 
+ */
+const buildNestedResourceGetResponse = (request, reply, elements, nestedResourceQuery) => {
+  const getNestedElements = element => !!element ? nestedResourceQuery(element) : [];
+  const nestedElements = getNestedElements(getElementByParamsId(request, elements));
+
+    return nestedElements
+      ? reply(nestedElements)
       : reply(ERROR_NOT_FOUND).code(404);
-  } else {
-    // heroku has older nodejs version - Object.values is not allowed :()
-    // const result = Object.keys(simpleQuery).length > 0
-    //   ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == Object.values(simpleQuery)[0])
-    //   : elements;
-    const result = Object.keys(simpleQuery).length > 0
-      ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == simpleQuery[Object.keys(simpleQuery)[0]])
-      : elements;
-    return reply(result);
-  }
 };
 
 const buildCreateOrUpdateResponse = (request, reply, elements, resourceName) => {
@@ -74,5 +81,15 @@ const buildDeleteResponse = (request, reply, elements) => {
 module.exports = {
   buildGetResponse,
   buildCreateOrUpdateResponse,
-  buildDeleteResponse
+  buildDeleteResponse,
+  buildNestedResourceGetResponse
 };
+
+const getElementByParamsId = (request, elements) => elements.find(e => e.id == encodeURIComponent(request.params.id));
+
+const filterBySimpleKeyValueQuery = (simpleQuery, elements) =>
+  // heroku has older nodejs version - Object.values is not allowed :()
+  Object.keys(simpleQuery).length > 0
+    ? elements.filter(e => e[Object.keys(simpleQuery)[0]] == simpleQuery[Object.keys(simpleQuery)[0]])
+    : elements;
+

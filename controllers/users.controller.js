@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const responseUtils = require('../response-utils');
-let users = require('../data').users;
+let { users, lists } = require('../data');
 
 const controller = (server) => {
   server.route({
@@ -15,6 +15,24 @@ const controller = (server) => {
       validate: {
         params: {
           id: Joi.number().integer().allow(null).optional()
+        }
+      }
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/users/{id}/lists',
+    handler: (request, reply) => {
+      return responseUtils.buildNestedResourceGetResponse(
+        request, reply, users, 
+        user => lists.filter(list => list.userId == user.id));
+    },
+    config: {
+      tags: ['api'],
+      validate: {
+        params: {
+          id: Joi.number().integer().required()
         }
       }
     }
