@@ -19,6 +19,7 @@
     "hapi": "^16.6.3",
     "hapi-auth-basic": "^4.2.0",
     "hapi-swagger": "^7.7.0",
+    "hoek": "^4.2.1",
     "inert": "^4.2.0",
     "joi": "^10.5.2",
     "vision": "^4.1.1"
