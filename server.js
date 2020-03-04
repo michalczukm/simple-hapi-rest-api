@@ -42,6 +42,7 @@ const addRoutes = () => {
   require('./controllers/lists.controller')(server);
   require('./controllers/items.controller')(server);
   require('./controllers/users.controller')(server);
+  require('./controllers/workshops.controller')(server);
 };
 
 const basicAuthValidation = (request, username, password, callback) => {
